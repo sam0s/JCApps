@@ -1,24 +1,50 @@
 #include "stdio.h"
 #include "string.h"
 
-int main() {
+int file_exist(const char * filename){
+    /* try to open file to read */
+    FILE *file;
+    if (file = fopen(filename, "r")){
+        fclose(file);
+        return 1;
+    }
+    return 0;
+}
 
+int main() {
+	//create boolean
 	typedef int bool;
 	enum {false,true };
 
+	//init variables
+	const char header[50] = "JCEdit Version 2 - Written by sam0s";
 	char full_file[999][500];
 	char clinetext[500];
 	int linemax = 0;
 	int clinenum = 0;
 	bool cmd = false;
 
+	//file name prompt
 	system("cls");
-	char filename[32];
-	printf("JCEdit Version 1.5 - Written by sam0s \nEnter file name: ");
+	char filename[50];
+	printf("%s \nEnter file name: ",header);
 	gets(filename);
 
+	//load file if it exists
+	if(file_exist(filename))
+	{
+		FILE *fp;
+		fp = fopen(filename, "r");
+		while(!feof(fp)){
+		fgets(full_file[linemax], 500, fp);
+		full_file[linemax][strcspn(full_file[linemax], "\n")] = 0;
+		linemax+=1;
+		}
+		fclose(fp);
+	}
+
 	system("cls");
-	printf("JCEdit Version 1.5 - Written by sam0s \n");
+	printf("%s \n",header);
 	printf("FILENAME: %s | LINEMAX: %d \n\n",filename,linemax);
 
 	bool run = true;
@@ -43,7 +69,7 @@ int main() {
 		}
 
 		if(strcmp(clinetext, ".ls") == 0){
-			system("cls");printf("JCEdit Version 1.5 - Written by sam0s \n");cmd=true;
+			system("cls");printf("%s \n",header);cmd=true;
 			printf("FILENAME: %s | LINEMAX: %d \n",filename,linemax);
 
 			if(linemax>=1){
@@ -55,7 +81,6 @@ int main() {
 
 			printf("\n");
 		}
-
 
 		if(!cmd){
 		strcpy(full_file[clinenum], clinetext);
