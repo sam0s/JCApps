@@ -1,0 +1,9 @@
+doc/
+include/
+lib/
+libtcc/
+cmd.exe
+libtcc.dll
+tcc.exe
+i386-win32-tcc.exe
+.DS_Store
