@@ -90,16 +90,19 @@ int winCheck(char board[3][3])
 
 int drawMenu(){
     system("cls");
-    printf("TIC TAC TOE by sam0s\n\nChoose an option:\ns) START GAME (2 Player)\nt) START GAME (1 Player)\nq) QUIT\n\n> ");
-    char b = getchar();fflush(stdin);
-    if(b=='s'){return 1;}
-    if(b=='t'){return 2;}
-    if(b=='q'){return 0;}
+    printf("TIC TAC TOE v1 by sam0s\n\nChoose an option:\n1) START GAME (2 Player)\n2) START GAME (1 Player)\n3) QUIT\n\n> ");
+    char b = ' ';
+    while(b!='1' && b!='2' && b!='3'){
+    b = getchar();fflush(stdin);
+    if(b=='1'){return 1;}
+    if(b=='2'){return 2;}
+    if(b=='3'){return 0;}
+    }
 }
 
 int main()
 {
-    bool turn = false;
+    bool turn = true;
     bool singlep = false;
     char table[3][3] = {};
     int check = -1;
@@ -118,13 +121,14 @@ int main()
 
         check = drawMenu();
         if (check == 2){check-=1;singlep=!singlep;}
+        if (check == 0){return 0;}
 
         while(check==1){
 
             while(turn){
             system("cls");
             drawTable(table);
-            printf("Choose your next move (P1) (type h to toggle move reference): ");
+            printf("Choose your next move (P1): ");
             a = getchar()-97;fflush(stdin);
             if(table[pointRefy[a]][pointRefx[a]] != 'x' && table[pointRefy[a]][pointRefx[a]] != 'o'){table[pointRefy[a]][pointRefx[a]] = 'x';turn=!turn;}
             }
@@ -133,11 +137,13 @@ int main()
 
             if (singlep){
                 enemyMove(table);
+                if(winCheck(table)!=0){check = -1;break;}
+                turn=!turn;
             }else{
                 while(!turn){
                 system("cls");
                 drawTable(table);
-                printf("Choose your next move (P2) (type h to toggle move reference): ");
+                printf("Choose your next move (P2): ");
                 a = getchar()-97;fflush(stdin);
                 if(table[pointRefy[a]][pointRefx[a]] != 'x' && table[pointRefy[a]][pointRefx[a]] != 'o')
                 {
@@ -148,9 +154,12 @@ int main()
 
             if(winCheck(table)!=0){check = -1;break;}
         }
+
         system("cls");
         drawTable(table);
-        printf("You win player %d",winCheck(table));
+        int win = winCheck(table);
+        if(win<1){win=2;}
+        printf("You win player %d",win);
         a = getchar();fflush(stdin);
         return 0;
 
